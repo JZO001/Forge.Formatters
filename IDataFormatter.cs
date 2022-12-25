@@ -58,13 +58,6 @@ namespace Forge.Formatters
         /// <param name="data">Object that will be formatted</param>
         void Write(Stream outputStream, T data);
 
-        /// <summary>
-        /// Format the provided object into the output stream from the input stream
-        /// </summary>
-        /// <param name="outputStream">Stream that the formatted data has been written</param>
-        /// <param name="inputStream">Object that will be formatted</param>
-        void Write(Stream outputStream, Stream inputStream);
-
     }
 
 }

@@ -18,7 +18,11 @@ namespace Forge.Formatters
         {
             return services
                 .AddSingleton<IAesByteArrayFormatter, AesByteArrayFormatter>()
-                .AddSingleton<IGZipFormatter, GZipFormatter>();
+                .AddSingleton<IGZipFormatter, GZipFormatter>()
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+                .AddSingleton<IBrotliFormatter, BrotliFormatter>()
+#endif
+                ;
         }
 
     }

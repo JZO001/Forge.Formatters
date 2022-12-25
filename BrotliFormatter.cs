@@ -17,16 +17,16 @@ namespace Forge.Formatters
     /// <summary>
     /// Brotli Formatter
     /// </summary>
-    public sealed class BrotliFormatter : IGZipFormatter
+    public sealed class BrotliFormatter : IBrotliFormatter
     {
 
-        #region Field(s)
+#region Field(s)
 
         private const int BUFFER_SIZE = 8192;
 
-        #endregion
+#endregion
 
-        #region Constructor(s)
+#region Constructor(s)
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BrotliFormatter"/> class.
@@ -35,9 +35,9 @@ namespace Forge.Formatters
         {
         }
 
-        #endregion
+#endregion
 
-        #region Public method(s)
+#region Public method(s)
 
         /// <summary>
         /// Determines whether this instance can read the specified stream.
@@ -274,7 +274,7 @@ namespace Forge.Formatters
             return new BrotliFormatter();
         }
 
-        #endregion
+#endregion
 
     }
 
