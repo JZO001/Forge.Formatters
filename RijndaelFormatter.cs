@@ -358,10 +358,19 @@ namespace Forge.Formatters
             }
         }
 
+        /// <summary>Restore the content of the stream</summary>
+        /// <param name="inputStream">Source stream</param>
+        /// <param name="outputStream">Output stream</param>
+        /// <exception cref="System.NotImplementedException">In all cases</exception>
+        public void Read(Stream inputStream, Stream outputStream)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Writes the specified stream.
         /// </summary>
-        /// <param name="stream">The stream.</param>
+        /// <param name="outputStream">The stream.</param>
         /// <param name="data">The data.</param>
         /// <exception cref="ArgumentNullException">
         /// stream
@@ -369,9 +378,9 @@ namespace Forge.Formatters
         /// data
         /// </exception>
         /// <exception cref="FormatException"></exception>
-        public void Write(Stream stream, T data)
+        public void Write(Stream outputStream, T data)
         {
-            if (stream == null)
+            if (outputStream == null)
             {
                 ThrowHelper.ThrowArgumentNullException("stream");
             }
@@ -393,9 +402,8 @@ namespace Forge.Formatters
                         r.Key = mKey;
                         using (ICryptoTransform encryptor = r.CreateEncryptor())
                         {
-                            CryptoStream csEncrypt = new CryptoStream(stream, encryptor, CryptoStreamMode.Write);
+                            CryptoStream csEncrypt = new CryptoStream(outputStream, encryptor, CryptoStreamMode.Write);
                             ms.WriteTo(csEncrypt);
-                            //csEncrypt.Write(ms.ToArray(), 0, (int)ms.Length);
                             csEncrypt.FlushFinalBlock();
                         }
                     }
@@ -409,6 +417,15 @@ namespace Forge.Formatters
             {
                 throw new FormatException(ex.Message, ex);
             }
+        }
+
+        /// <summary>Format the provided object into the output stream from the input stream</summary>
+        /// <param name="outputStream">Stream that the formatted data has been written</param>
+        /// <param name="inputStream">Object that will be formatted</param>
+        /// <exception cref="System.NotImplementedException">In all cases</exception>
+        public void Write(Stream outputStream, Stream inputStream)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

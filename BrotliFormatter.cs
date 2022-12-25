@@ -1,8 +1,10 @@
 ﻿/* *********************************************************************
- * Date: 11 Jun 2009
+ * Date: 24 Dec 2022
  * Created by: Zoltan Juhasz
  * E-Mail: forge@jzo.hu
 ***********************************************************************/
+
+#if NETSTANDARD2_1 || NETCOREAPP3_1_OR_GREATER
 
 using Forge.Shared;
 using System;
@@ -13,9 +15,9 @@ namespace Forge.Formatters
 {
 
     /// <summary>
-    /// GZip Formatter
+    /// Brotli Formatter
     /// </summary>
-    public sealed class GZipFormatter : IGZipFormatter
+    public sealed class BrotliFormatter : IGZipFormatter
     {
 
         #region Field(s)
@@ -27,9 +29,9 @@ namespace Forge.Formatters
         #region Constructor(s)
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GZipFormatter"/> class.
+        /// Initializes a new instance of the <see cref="BrotliFormatter"/> class.
         /// </summary>
-        public GZipFormatter()
+        public BrotliFormatter()
         {
         }
 
@@ -58,11 +60,11 @@ namespace Forge.Formatters
                 long pos = stream.Position;
                 try
                 {
-                    using (GZipStream zipStream = new GZipStream(stream, CompressionMode.Decompress, true))
+                    using (BrotliStream brotliStream = new BrotliStream(stream, CompressionMode.Decompress))
                     {
                         byte[] buffer = new byte[BUFFER_SIZE];
                         int numRead = 0;
-                        while ((numRead = zipStream.Read(buffer, 0, buffer.Length)) != 0)
+                        while ((numRead = brotliStream.Read(buffer, 0, buffer.Length)) != 0)
                         {
                         }
                     }
@@ -119,11 +121,11 @@ namespace Forge.Formatters
             {
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    using (GZipStream zipStream = new GZipStream(compressedStream, CompressionMode.Decompress, true))
+                    using (BrotliStream brotliStream = new BrotliStream(compressedStream, CompressionMode.Decompress, true))
                     {
                         byte[] buffer = new byte[BUFFER_SIZE];
                         int numRead = 0;
-                        while ((numRead = zipStream.Read(buffer, 0, buffer.Length)) != 0)
+                        while ((numRead = brotliStream.Read(buffer, 0, buffer.Length)) != 0)
                         {
                             ms.Write(buffer, 0, numRead);
                         }
@@ -161,11 +163,11 @@ namespace Forge.Formatters
 
             try
             {
-                using (GZipStream zipStream = new GZipStream(compressedStream, CompressionMode.Decompress, true))
+                using (BrotliStream brotliStream = new BrotliStream(compressedStream, CompressionMode.Decompress, true))
                 {
                     byte[] buffer = new byte[BUFFER_SIZE];
                     int numRead = 0;
-                    while ((numRead = zipStream.Read(buffer, 0, buffer.Length)) != 0)
+                    while ((numRead = brotliStream.Read(buffer, 0, buffer.Length)) != 0)
                     {
                         decompressedStream.Write(buffer, 0, numRead);
                     }
@@ -184,8 +186,8 @@ namespace Forge.Formatters
         /// <summary>
         /// Writes compressed data into the specified stream.
         /// </summary>
-        /// <param name="outputStream">The stream.</param>
-        /// <param name="data">The data.</param>
+        /// <param name="outputStream">The output stream.</param>
+        /// <param name="data">The compressed data.</param>
         /// <exception cref="ArgumentNullException">
         /// stream
         /// or
@@ -205,10 +207,10 @@ namespace Forge.Formatters
 
             try
             {
-                using (GZipStream zipStream = new GZipStream(outputStream, CompressionMode.Compress, true))
+                using (BrotliStream brotliStream = new BrotliStream(outputStream, CompressionMode.Compress, true))
                 {
-                    zipStream.Write(data, 0, data.Length);
-                    zipStream.Flush();
+                    brotliStream.Write(data, 0, data.Length);
+                    brotliStream.Flush();
                 }
             }
             catch (FormatException)
@@ -245,10 +247,10 @@ namespace Forge.Formatters
 
             try
             {
-                using (GZipStream zipStream = new GZipStream(outputStream, CompressionMode.Compress, true))
+                using (BrotliStream brotliStream = new BrotliStream(outputStream, CompressionMode.Compress, true))
                 {
-                    inputStream.CopyTo(zipStream);
-                    zipStream.Flush();
+                    inputStream.CopyTo(brotliStream);
+                    brotliStream.Flush();
                 }
             }
             catch (FormatException)
@@ -269,7 +271,7 @@ namespace Forge.Formatters
         /// </returns>
         public object Clone()
         {
-            return new GZipFormatter();
+            return new BrotliFormatter();
         }
 
         #endregion
@@ -277,3 +279,5 @@ namespace Forge.Formatters
     }
 
 }
+
+#endif

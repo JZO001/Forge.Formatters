@@ -281,37 +281,66 @@ namespace Forge.Formatters
         /// <summary>
         /// Reads the specified stream.
         /// </summary>
-        /// <param name="sourceStream">The stream.</param>
+        /// <param name="inputStream">The stream.</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException">stream</exception>
+        /// <exception cref="ArgumentNullException">inputStream</exception>
         /// <exception cref="FormatException"></exception>
-        public Stream Read(Stream sourceStream)
+        public Stream Read(Stream inputStream)
         {
-            if (sourceStream == null)
+            if (inputStream == null)
             {
-                ThrowHelper.ThrowArgumentNullException("sourceStream");
+                ThrowHelper.ThrowArgumentNullException("inputStream");
             }
 
             try
             {
                 MemoryStream ms = new MemoryStream();
+                Read(inputStream, ms);
+                ms.Position = 0;
+                return ms;
+            }
+            catch (FormatException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new FormatException(ex.Message, ex);
+            }
+        }
+
+        /// <summary>Restore the content from the input stream and writes into the output stream.</summary>
+        /// <param name="inputStream">Source stream</param>
+        /// <param name="outputStream">Output stream</param>
+        /// <exception cref="System.FormatException"></exception>
+        public void Read(Stream inputStream, Stream outputStream)
+        {
+            if (inputStream == null)
+            {
+                ThrowHelper.ThrowArgumentNullException("inputStream");
+            }
+            if (outputStream == null)
+            {
+                ThrowHelper.ThrowArgumentNullException("outputStream");
+            }
+
+            try
+            {
                 using (RijndaelManaged r = new RijndaelManaged())
                 {
                     r.IV = mIV;
                     r.Key = mKey;
                     using (ICryptoTransform decryptor = r.CreateDecryptor())
                     {
-                        CryptoStream csDecrypt = new CryptoStream(sourceStream, decryptor, CryptoStreamMode.Read);
+                        CryptoStream csDecrypt = new CryptoStream(inputStream, decryptor, CryptoStreamMode.Read);
                         byte[] buffer = new byte[BUFFER_SIZE];
                         int numRead = 0;
                         while ((numRead = csDecrypt.Read(buffer, 0, buffer.Length)) != 0)
                         {
-                            ms.Write(buffer, 0, numRead);
+                            outputStream.Write(buffer, 0, numRead);
                         }
                     }
                 }
-                ms.Position = 0;
-                return ms;
             }
             catch (FormatException)
             {
@@ -326,19 +355,19 @@ namespace Forge.Formatters
         /// <summary>
         /// Writes the specified source stream content into the target stream.
         /// </summary>
-        /// <param name="targetStream">The targetStream.</param>
-        /// <param name="sourceStream">The sourceStream.</param>
+        /// <param name="outputStream">The targetStream.</param>
+        /// <param name="inputStream">The sourceStream.</param>
         /// <exception cref="FormatException"></exception>
         /// <exception cref="ArgumentNullException">stream
         /// or
         /// data</exception>
-        public void Write(Stream targetStream, Stream sourceStream)
+        public void Write(Stream outputStream, Stream inputStream)
         {
-            if (targetStream == null)
+            if (outputStream == null)
             {
                 ThrowHelper.ThrowArgumentNullException("targetStream");
             }
-            if (sourceStream == null)
+            if (inputStream == null)
             {
                 ThrowHelper.ThrowArgumentNullException("sourceStream");
             }
@@ -351,10 +380,10 @@ namespace Forge.Formatters
                     r.Key = mKey;
                     using (ICryptoTransform encryptor = r.CreateEncryptor())
                     {
-                        CryptoStream csEncrypt = new CryptoStream(targetStream, encryptor, CryptoStreamMode.Write);
+                        CryptoStream csEncrypt = new CryptoStream(outputStream, encryptor, CryptoStreamMode.Write);
                         byte[] buffer = new byte[BUFFER_SIZE];
                         int numRead = 0;
-                        while ((numRead = sourceStream.Read(buffer, 0, buffer.Length)) != 0)
+                        while ((numRead = inputStream.Read(buffer, 0, buffer.Length)) != 0)
                         {
                             csEncrypt.Write(buffer, 0, numRead);
                         }

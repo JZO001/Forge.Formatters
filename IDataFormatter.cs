@@ -22,12 +22,12 @@ namespace Forge.Formatters
         /// </summary>
         /// <param name="stream">Content stream</param>
         /// <returns>
-        /// true if the content is deserializable
+        /// true if the content can be restored
         /// </returns>
         bool CanRead(Stream stream);
 
         /// <summary>
-        /// Indicate that the item is serializable with the current formatter
+        /// Indicate that the item is formattable with the current formatter
         /// </summary>
         /// <param name="item">The item.</param>
         /// <returns>
@@ -36,7 +36,7 @@ namespace Forge.Formatters
         bool CanWrite(T item);
 
         /// <summary>
-        /// Deserialize the content of the stream
+        /// Format the content of the stream
         /// </summary>
         /// <param name="stream">Content stream</param>
         /// <returns>
@@ -45,11 +45,25 @@ namespace Forge.Formatters
         T Read(Stream stream);
 
         /// <summary>
-        /// Serializable the provided object into the supplied stream
+        /// Restore the content of the stream
         /// </summary>
-        /// <param name="stream">Stream that the serialized data has been written</param>
-        /// <param name="data">Object that will be serialized</param>
-        void Write(Stream stream, T data);
+        /// <param name="inputStream">Source stream</param>
+        /// <param name="outputStream">Output stream</param>
+        void Read(Stream inputStream, Stream outputStream);
+
+        /// <summary>
+        /// Format the provided object into the supplied stream
+        /// </summary>
+        /// <param name="outputStream">Stream that the formatted data has been written</param>
+        /// <param name="data">Object that will be formatted</param>
+        void Write(Stream outputStream, T data);
+
+        /// <summary>
+        /// Format the provided object into the output stream from the input stream
+        /// </summary>
+        /// <param name="outputStream">Stream that the formatted data has been written</param>
+        /// <param name="inputStream">Object that will be formatted</param>
+        void Write(Stream outputStream, Stream inputStream);
 
     }
 
