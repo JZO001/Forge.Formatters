@@ -18,10 +18,13 @@
 		<PackageId>Forge.Formatters</PackageId>
 		<Authors>Zoltan Juhasz</Authors>
 		<Title>Forge Formatters</Title>
-		<SignAssembly>true</SignAssembly>
-		<AssemblyOriginatorKeyFile>..\.Documents\Forge.pfx</AssemblyOriginatorKeyFile>
-		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<ProjectGuid>{38E6C558-5AA6-4DF3-9F0D-576FCC35F538}</ProjectGuid>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\..\.Documents\Forge.pfx</AssemblyOriginatorKeyFile>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -76,8 +79,8 @@
 	  <ProjectReference Include="..\Forge.Shared\Forge.Shared.csproj" />
 	</ItemGroup>
 
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	<!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<Exec Command="echo F|xcopy /r /y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(SolutionDir).Output\$(TargetFramework)\$(TargetName).dll&quot;&#xD;&#xA;echo F|xcopy /r /y &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;$(SolutionDir).Output\$(TargetFramework)\$(TargetName).pdb&quot;&#xD;&#xA;echo F|xcopy /r /y &quot;$(TargetDir)$(TargetName).xml&quot; &quot;$(SolutionDir).Output\$(TargetFramework)\$(TargetName).xml&quot;&#xD;&#xA;" />
-	</Target>
+	</Target>-->
 
 </Project>
