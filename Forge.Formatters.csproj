@@ -1,16 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup Label="Globals">
-		<SccProjectName>SAK</SccProjectName>
-		<SccProvider>SAK</SccProvider>
-		<SccAuxPath>SAK</SccAuxPath>
-		<SccLocalPath>SAK</SccLocalPath>
+		<SccProjectName></SccProjectName>
+		<SccProvider></SccProvider>
+		<SccAuxPath></SccAuxPath>
+		<SccLocalPath></SccLocalPath>
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<TargetFrameworks>net40;net461;netstandard2.0;netstandard2.1;netcoreapp3.1;net6.0;net7.0;net8.0</TargetFrameworks>
-		<Version>2.1.1.0</Version>
-		<AssemblyVersion>2.1.1.0</AssemblyVersion>
+		<Version>2.1.2.0</Version>
+		<AssemblyVersion>2.1.2.0</AssemblyVersion>
 		<Copyright>Copyright © Zoltan Juhasz, 2004-2024</Copyright>
 		<Description>Forge Patterns and Practices</Description>
 		<Product>Forge: reference, practice and patterns implementations and helper(s)</Product>
